@@ -19,6 +19,8 @@ jobs:
 
     - name: Package Lambda
       run: |
+        echo "Packaging lambda_function.py"
+        ls -lh
         zip lambda.zip lambda_function.py
         ls -lh lambda.zip
         unzip -l lambda.zip
@@ -30,8 +32,16 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Deploy to AWS Lambda
+    - name: Deploy to AWS Lambda (debug mode)
       run: |
+        echo "Current directory: $(pwd)"
+        echo "Files:"
+        ls -lh
+        echo "Contents of zip:"
+        unzip -l lambda.zip
+
+        echo "Now deploying..."
         aws lambda update-function-code \
           --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
-          --zip-file fileb://lambda.zip
+          --zip-file fileb://$(pwd)/lambda.zip \
+          --debug
