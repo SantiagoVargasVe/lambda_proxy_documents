@@ -19,7 +19,7 @@ jobs:
 
     - name: Package Lambda
       run: |
-        zip -r lambda.zip lambda_function.py
+        zip lambda.zip lambda_function.py
         ls -lh lambda.zip
         unzip -l lambda.zip
 
@@ -30,18 +30,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Deploy to AWS Lambda (debug mode)
+    - name: Deploy to AWS Lambda
       run: |
-        echo "Working directory: $(pwd)"
-        echo "Listing files in workspace:"
-        ls -lh
-        echo "Checking if lambda.zip is present:"
-        test -f lambda.zip && echo "✅ lambda.zip found" || echo "❌ lambda.zip MISSING"
-        echo "Printing lambda.zip size:"
-        ls -lh lambda.zip
-
-        echo ">>> Now calling AWS CLI with debug output:"
         aws lambda update-function-code \
           --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
-          --zip-file fileb://lambda.zip \
-          --debug
+          --zip-file fileb://lambda.zip
