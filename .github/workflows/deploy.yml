@@ -17,15 +17,11 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: Install dependencies and package Lambda
+    - name: Package Lambda
       run: |
-        mkdir -p package
-        pip install -r requirements.txt -t package
-        cp lambda_function.py package/
-        cd package
-        zip -r9 ../lambda.zip .
-        cd ..
-        ls -lh lambda.zip  # ✅ Confirm the zip file exists
+        zip -r lambda.zip lambda_function.py
+        ls -lh lambda.zip
+        unzip -l lambda.zip
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -36,7 +32,6 @@ jobs:
 
     - name: Deploy to AWS Lambda
       run: |
-        ls -lh lambda.zip  # ✅ Double-check before upload
         aws lambda update-function-code \
           --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
           --zip-file fileb://lambda.zip
