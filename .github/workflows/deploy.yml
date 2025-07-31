@@ -31,11 +31,16 @@ jobs:
 
     - name: Upload lambda.zip to S3
       run: |
-        aws s3 cp lambda.zip s3://lambda-documents-zip/lambda.zip
+        aws s3 cp lambda.zip s3://lambda-documents-zip/lambda.zip --region ${{ secrets.AWS_REGION }}
+
+    - name: Confirm S3 object exists
+      run: |
+        aws s3 ls s3://lambda-documents-zip/lambda.zip --region ${{ secrets.AWS_REGION }}
 
     - name: Deploy Lambda from S3
       run: |
         aws lambda update-function-code \
           --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
           --s3-bucket lambda-documents-zip \
-          --s3-key lambda.zip
+          --s3-key lambda.zip \
+          --region ${{ secrets.AWS_REGION }}
