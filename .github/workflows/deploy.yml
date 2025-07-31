@@ -19,10 +19,7 @@ jobs:
 
     - name: Package Lambda
       run: |
-        echo "Packaging lambda_function.py"
-        ls -lh
         zip lambda.zip lambda_function.py
-        ls -lh lambda.zip
         unzip -l lambda.zip
 
     - name: Configure AWS credentials
@@ -32,16 +29,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Deploy to AWS Lambda (debug mode)
+    - name: Upload lambda.zip to S3
       run: |
-        echo "Current directory: $(pwd)"
-        echo "Files:"
-        ls -lh
-        echo "Contents of zip:"
-        unzip -l lambda.zip
+        aws s3 cp lambda.zip s3://lambda-documents-zip/lambda.zip
 
-        echo "Now deploying..."
+    - name: Deploy Lambda from S3
+      run: |
         aws lambda update-function-code \
           --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
-          --zip-file fileb://$(pwd)/lambda.zip \
-          --debug
+          --s3-bucket lambda-documents-zip \
+          --s3-key lambda.zip
