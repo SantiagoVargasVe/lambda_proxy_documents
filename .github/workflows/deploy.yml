@@ -39,8 +39,8 @@ jobs:
 
     - name: Deploy Lambda from S3
       run: |
-        aws lambda update-function-code \
+        aws lambda ${{ secrets.LAMBDA_FUNCTION_NAME }} \
           --function-name lambda-proxy-documents \
           --s3-bucket lambda-documents-zip \
           --s3-key lambda.zip \
-          --region us-east-1
+          --region  ${{ secrets.AWS_REGION }}
