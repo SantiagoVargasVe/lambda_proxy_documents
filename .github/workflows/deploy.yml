@@ -25,6 +25,7 @@ jobs:
         cd package
         zip -r9 ../lambda.zip .
         cd ..
+        ls -lh lambda.zip  # ✅ Confirm the zip file exists
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
@@ -35,7 +36,7 @@ jobs:
 
     - name: Deploy to AWS Lambda
       run: |
+        ls -lh lambda.zip  # ✅ Double-check before upload
         aws lambda update-function-code \
           --function-name ${{ secrets.LAMBDA_FUNCTION_NAME }} \
           --zip-file fileb://lambda.zip
-
