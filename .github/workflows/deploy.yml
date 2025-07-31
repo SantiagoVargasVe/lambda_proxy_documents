@@ -22,6 +22,11 @@ jobs:
         zip lambda.zip lambda_function.py
         unzip -l lambda.zip
 
+    - name: Debug environment
+      run: |
+        echo "Function name: ${{ secrets.LAMBDA_FUNCTION_NAME }}"
+        echo "Region: ${{ secrets.AWS_REGION }}"
+        
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
