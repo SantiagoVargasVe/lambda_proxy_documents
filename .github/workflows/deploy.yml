@@ -23,7 +23,8 @@ jobs:
         pip install -r requirements.txt -t package
         cp lambda_function.py package/
         cd package
-        zip -r9 ./lambda.zip .
+        zip -r9 ../lambda.zip .
+        cd ..
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
