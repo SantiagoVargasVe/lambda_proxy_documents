@@ -6,7 +6,7 @@ ses = boto3.client('ses')
 s3 = boto3.client('s3')
 
 FROM_EMAIL = "documents@santiagovargas.co"
-TO_EMAIL = "dianavegag@hotmail.com"  # Replace this
+TO_EMAIL = "isabellavergaravega@hotmail.com"  # Replace this
 
 def lambda_handler(event, context):
     for record in event['Records']:
